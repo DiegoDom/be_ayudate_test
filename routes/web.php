@@ -33,6 +33,7 @@ $router->group(['middleware' => 'auth'], function() use ($router) {
     $router->get('users/{id}', ['as' => 'users.show', 'uses' => 'UserController@show']);
     $router->post('users/{id}', ['as' => 'users.update', 'uses' => 'UserController@update']);
     $router->delete('users/{id}', ['as' => 'users.delete', 'uses' => 'UserController@delete']);
+    $router->post('users/change_password', ['as' => 'users.change_password', 'uses' => 'UserController@changePassword']);
 
 
     $router->post('logout', ['as' => 'users.logout', 'uses' => 'AuthController@logout']);

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
+use function PHPUnit\Framework\throwException;
 
 class UserController extends Controller
 {
@@ -81,6 +84,31 @@ class UserController extends Controller
             'status' => 'success',
             'data' => 'Registro eliminado correctamente'
         ]);
+    }
+
+    public function changePassword(Request $request) {
+
+        $this->validate($request, [
+            'old_password'     => 'required',
+            'new_password'     => 'required|min:6',
+            'confirm_password' => 'required|same:new_password',
+        ]);
+
+        $data = $request->all();
+        $user = auth()->user();
+
+        if(!Hash::check($data['old_password'], $user->password)){
+
+            throw new ErrorException('Tu contraseña actual no es correcta', 0);
+
+        } else {
+            $user->password = Hash::make($data['new_password']);
+            $user->update();
+            return response()->json([
+                'status' => 'success',
+                'data' => $user
+            ]);
+        }
     }
 
 }
