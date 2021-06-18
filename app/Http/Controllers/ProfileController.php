@@ -34,13 +34,6 @@ class ProfileController extends Controller
 
         $profile = Profile::create($input);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->profile_id = $profile->id;
-        $user->save();
-
         return response()->json([
             'status' => 'success',
             'data' => $profile
@@ -78,9 +71,7 @@ class ProfileController extends Controller
     private function validar($request, $id = '') {
         $this->validate($request, [
             'name' => 'required|max:128',
-            'description' => 'max:255',
-            'email' => 'required|email|unique:users'.$id,
-            'password' => 'required|min:8'
+            'description' => 'max:255'
         ]);
     }
 }

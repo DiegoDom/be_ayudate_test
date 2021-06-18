@@ -15,7 +15,7 @@ class Profiles extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 128);
+            $table->string('name', 128)->unique();
             $table->string('description')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();

@@ -17,11 +17,11 @@ class User extends Migration
             $table->id();
             $table->string('name', 45);
             $table->string('password');
-            $table->string('email', 128)->unique();
+            $table->string('email', 128);
             $table->string('phone', 14)->nullable();
             $table->string('status')->default('active');
             $table->longText('api_token')->nullable();
-            $table->time('token_expiration')->nullable();
+            $table->integer('token_expiration')->nullable();
             $table->unsignedBigInteger('profile_id');
             $table->timestamps();
             $table->foreign('profile_id')->references('id')->on('profiles')->onDelete('cascade');

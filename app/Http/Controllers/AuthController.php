@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Models\Profile;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+
 
 class AuthController extends Controller
 {
@@ -19,27 +16,6 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-
-    public function register(Request $request) {
-
-        $this->validar($request);
-
-        $input = $request->all();
-
-        $profile = Profile::create($input);
-
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->profile_id = $profile->id;
-        $user->save();
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $user
-        ]);
     }
 
     /**
@@ -107,16 +83,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60 * 60
-        ]);
-    }
-
-    /* STORE AND UPDATE VALIDATIONS */
-    private function validar($request) {
-        $this->validate($request, [
-            'name' => 'required|max:128',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8'
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => $user->name
         ]);
     }
 }
